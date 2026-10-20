@@ -26,3 +26,20 @@ render();
 
 // Added organizer feature: weekly completion percentages.
 function habitPercent(habit) { return Math.min(100, Math.round((habit.days.length / 7) * 100)); }
+
+
+// Habit expansion: weekly goal and progress summary.
+(() => {
+  const baseRender = render; let goal = habits.length;
+  const enhance = () => {
+    if (document.querySelector("#habit-tools")) return;
+    const panel = document.createElement("section"); panel.id = "habit-tools"; panel.className = "item";
+    panel.innerHTML = '<strong>Habit goals</strong><div class="row"><input id="habit-goal" type="number" value="2" min="1"/><button id="apply-goal" type="button">Apply goal</button></div><p id="habit-summary" class="muted small"></p>';
+    document.querySelector("#app")?.append(panel);
+    const update = () => { const completed = habits.filter((habit) => habit.days.includes(today())).length; panel.querySelector("#habit-summary").textContent = completed + " of " + goal + " goal completed"; };
+    panel.querySelector("#apply-goal").onclick = () => { goal = Number(panel.querySelector("#habit-goal").value); update(); };
+    update();
+  };
+  render = () => { baseRender(); enhance(); };
+  enhance();
+})();
