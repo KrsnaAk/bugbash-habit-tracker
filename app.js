@@ -22,3 +22,7 @@ function render() {
   );
 }
 render();
+
+
+// Added organizer feature: weekly completion percentages.
+function habitPercent(habit) { return Math.min(100, Math.round((habit.days.length / 7) * 100)); }
